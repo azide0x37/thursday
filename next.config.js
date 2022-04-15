@@ -1,22 +1,21 @@
+const withBundleAnalyzer = require('@next/bundle-analyzer')()
 const runtimeCaching = require('next-pwa/cache')
-const withPWA = require('next-pwa')({
-  pwa: {
-    dest: 'public',
-    runtimeCaching,
-  },
-})
+const withPWA = require('next-pwa')
 const withPlugins = require('next-compose-plugins')
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-  reactStrictMode: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  distDir: 'build',
-})
-
 module.exports = withPlugins([
-  [withBundleAnalyzer],
-  [withPWA]
+  [withBundleAnalyzer, {
+    enabled: process.env.ANALYZE === 'true',
+    reactStrictMode: true,
+    eslint: {
+      ignoreDuringBuilds: true,
+    },
+    distDir: 'build',
+  }],
+  [withPWA, {
+    pwa: {
+      dest: 'public',
+      runtimeCaching,
+    }
+  }]
   // your other plugins here
 ])
