@@ -17,6 +17,16 @@
           "appId": "d2vfkles97mujj",
           "type": "manual"
         }
+      },
+      "function": {
+        "BGGApi": {
+          "deploymentBucketName": "amplify-quaoar-dev-145731-deployment",
+          "s3Key": "amplify-builds/BGGApi-766f2b73424c565a6d63-build.zip"
+        }
+      },
+      "auth": {
+        "quaoar78722fba78722fba": {},
+        "quaoarc3551e0d": {}
       }
     }
   }

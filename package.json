@@ -19,6 +19,7 @@
     "storybook:build": "build-storybook"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^2.15.3",
     "@mantine/core": "4.1.1",
     "@mantine/dates": "4.1.1",
     "@mantine/dropzone": "^4.1.3",
@@ -28,6 +29,8 @@
     "@mantine/prism": "4.1.1",
     "@modulz/radix-icons": "^4.0.0",
     "@primer/octicons-react": "^17.0.0",
+    "aws-amplify": "^4.3.20",
+    "aws-sdk": "^2.1116.0",
     "cookies-next": "^2.0.4",
     "dayjs": "^1.11.0",
     "next": "12.1.4",

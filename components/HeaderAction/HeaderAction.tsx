@@ -28,6 +28,16 @@ import {
   ChevronDown,
 } from 'tabler-icons-react';
 
+import { Auth } from 'aws-amplify';
+
+async function signOut() {
+  try {
+    await Auth.signOut();
+  } catch (error) {
+    console.log('error signing out: ', error);
+  }
+}
+
 const HEADER_HEIGHT = 60;
 
 const useStyles = createStyles((theme) => ({
@@ -111,7 +121,7 @@ export function HeaderAction({ links, user }: HeaderActionProps) {
         <Menu
           key={link.label}
           trigger="hover"
-          delay={0}
+          delay={250}
           transitionDuration={0}
           placement="end"
           gutter={1}
@@ -193,7 +203,7 @@ export function HeaderAction({ links, user }: HeaderActionProps) {
             <Menu.Label>Settings</Menu.Label>
             <Menu.Item icon={<Settings size={14} />}>Account settings</Menu.Item>
             <Menu.Item icon={<SwitchHorizontal size={14} />}>Change account</Menu.Item>
-            <Menu.Item icon={<Logout size={14} />}>Logout</Menu.Item>
+            <Menu.Item icon={<Logout size={14} />} onClick={() => signOut()}>Logout</Menu.Item>
 
             <Divider />
 
@@ -205,6 +215,6 @@ export function HeaderAction({ links, user }: HeaderActionProps) {
           </Menu>
         </Group>
       </Container>
-    </Header>
+    </Header >
   );
 }
