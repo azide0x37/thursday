@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-quaoar-dev-145731-authRole",
+      "UnauthRoleArn": "arn:aws:iam::733224113635:role/amplify-quaoar-dev-145731-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::733224113635:role/amplify-quaoar-dev-145731-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-quaoar-dev-145731-deployment",
+      "UnauthRoleName": "amplify-quaoar-dev-145731-unauthRole",
+      "StackName": "amplify-quaoar-dev-145731",
+      "StackId": "arn:aws:cloudformation:us-east-1:733224113635:stack/amplify-quaoar-dev-145731/210a34f0-bc2d-11ec-95e9-0aaae479a925",
+      "AmplifyAppId": "d2vfkles97mujj"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2vfkles97mujj",
+          "type": "manual"
+        }
+      }
+    }
+  }
+}
