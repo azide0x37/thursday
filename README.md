@@ -1,4 +1,6 @@
-# Mantine Next Template
+# Thursday Game Scheduling App
+
+![Screenshot of installed desktop pwa](https://github.com/azide0x37/thursday/blob/main/screenshot.png?raw=true)
 
 Get started with Mantine + Next with just a few button clicks.
 Click `Use this template` button at the header of repository or [follow this link](https://github.com/mantinedev/mantine-next-template/generate) and
