@@ -12,6 +12,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   eslint: {
     ignoreDuringBuilds: true,
   },
+  distDir: 'build',
 })
 
 module.exports = withPlugins([
