@@ -150,7 +150,7 @@ let games = [{
   "title": "Edge of Winter Chapter 5",
   "host": "Online",
   "date": "28 Apr 22",
-  "category": "Dungeons and Dragons"
+  "category": "Dungeons & Dragons"
 }, {
   "uuid": "f43dca35-fa9b-408d-858e-e35c55d856a1",
   "image": "https://pbs.twimg.com/media/FL1Ez-8WUAsSNaU?format=jpg&name=medium",
@@ -165,7 +165,7 @@ let games = [{
   "title": "Edge of Winter Chapter 6",
   "host": "Online",
   "date": "12 May 22",
-  "category": "Dungeons and Dragons"
+  "category": "Dungeons & Dragons"
 }, {
   "uuid": "df271a8c-82bb-4dc7-9b68-1fe6fbeb6528",
   "image": "https://pbs.twimg.com/media/D4ggci5XoAAVHPi.jpg",
