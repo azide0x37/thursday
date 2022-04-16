@@ -10,6 +10,7 @@ import {
   Button
 } from '@mantine/core';
 
+import { HeroTitle } from '../components/HeroTitle/HeroTitle'
 
 import { FooterLinks } from '../components/FooterLinks/FooterLinks'
 
@@ -51,25 +52,8 @@ export default function AppShellDemo() {
   const theme = useMantineTheme();
 
   return (
-    <AppShell
-      fixed
-      padding={"md"}
-      styles={{
-        main: {
-          background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-        },
-      }}
-      header={
-        <Header fixed height={60} >
-          <Link href="/app"><Button>Login Now</Button></Link>
-        </Header>
-      }
-      footer={
-        <FooterLinks {...footer_links} />
-      }
-    >
-      <Container size="xl" px="xs" py="xs">
-      </Container>
+    <AppShell>
+      <HeroTitle />
     </AppShell >
   );
 }

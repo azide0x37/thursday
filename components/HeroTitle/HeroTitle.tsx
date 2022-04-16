@@ -1,6 +1,8 @@
 import React from 'react';
 import { createStyles, Container, Text, Button, Group, useMantineTheme } from '@mantine/core';
 
+import Link from 'next/link'
+
 const BREAKPOINT = '@media (max-width: 755px)';
 
 const useStyles = createStyles((theme) => ({
@@ -72,9 +74,8 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : 'transparent',
 
     '&:hover': {
-      backgroundColor: `${
-        theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
-      } !important`,
+      backgroundColor: `${theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
+        } !important`,
     },
   },
 }));
@@ -91,27 +92,28 @@ export function HeroTitle() {
           <Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} inherit>
             fully featured
           </Text>{' '}
-          React components and hooks library
+          game night planner and player scheduler
         </h1>
 
         <Text className={classes.description} color="dimmed">
-          Build fully functional accessible web applications with ease – Mantine includes more than
-          100 customizable components and hooks to cover you in any situation
+          Organize and schedule your gaming sessions on your schedule. Thursday includes every feature you need for game nights to go off without a hitch!
         </Text>
 
         <Group className={classes.controls}>
-          <Button
-            size="xl"
-            className={classes.control}
-            variant="gradient"
-            gradient={{ from: 'blue', to: 'cyan' }}
-          >
-            Get started
-          </Button>
+          <Link href="/app">
+            <Button
+              size="xl"
+              className={classes.control}
+              variant="gradient"
+              gradient={{ from: 'blue', to: 'cyan' }}
+            >
+              Get started
+            </Button>
+          </Link>
 
           <Button
             component="a"
-            href="https://github.com/mantinedev/mantine"
+            href="https://github.com/azide0x37/thursday"
             size="xl"
             variant="outline"
             className={cx(classes.control, classes.githubControl)}
@@ -120,7 +122,7 @@ export function HeroTitle() {
             GitHub
           </Button>
         </Group>
-      </Container>
-    </div>
+      </Container >
+    </div >
   );
 }
