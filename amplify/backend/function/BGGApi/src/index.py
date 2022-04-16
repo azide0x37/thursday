@@ -5,9 +5,9 @@ import xml.etree.ElementTree as ET
 BASE_URL = "https://boardgamegeek.com/xmlapi2"
 
 def gameid(name):
-    responsename = requests.get(BASE_URL+"/search?query="+name+"&exact=1&type=boardgame")
-    tree = ET.fromstring(responsename.content)
     try:
+        responsename = requests.get(BASE_URL+"/search?query="+name+"&exact=1&type=boardgame")
+        tree = ET.fromstring(responsename.content)
         id = json.dumps(tree[0].attrib)
         idjson = json.loads(id)
         responsedata = requests.get(BASE_URL+"/thing?id="+idjson['id'])
@@ -30,7 +30,21 @@ def gameid(name):
     
         return jsonreply
     except:
-        return "Game not found"
+        responsename = requests.get(BASE_URL+"/search?query="+name+"&type=boardgame")
+        tree = ET.fromstring(responsename.content)
+        x = '{}'
+        y = 0
+        namejson = json.loads(x)
+        for child in tree:
+            for item in child:
+                if item.tag == 'name':
+                    gamename = json.dumps(item.attrib)
+                    gamevalue = json.loads(gamename)
+                    formated = {"name"+str(y):str(gamevalue['value'])}
+                    namejson.update(formated)
+                    y = y+1
+        return namejson
+
 
 def handler(event, context):
   print('received event:')

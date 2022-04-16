@@ -21,7 +21,7 @@
       "function": {
         "BGGApi": {
           "deploymentBucketName": "amplify-quaoar-dev-145731-deployment",
-          "s3Key": "amplify-builds/BGGApi-766f2b73424c565a6d63-build.zip"
+          "s3Key": "amplify-builds/BGGApi-304e516b4b3355536f2f-build.zip"
         }
       },
       "auth": {

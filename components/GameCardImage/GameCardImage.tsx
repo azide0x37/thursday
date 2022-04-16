@@ -57,7 +57,7 @@ export function GameCardImage({ image, title, category, host, date }: GameCardIm
       shadow="xl"
       p="xl"
       radius="md"
-      sx={{ backgroundImage: `url(${image})` }}
+      sx={{ backgroundImage: `url('${image}')` }}
       className={classes.card}
     >
       <div>

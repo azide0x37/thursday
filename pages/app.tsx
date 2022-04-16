@@ -37,6 +37,12 @@ import Lambda from 'aws-sdk/clients/lambda'; // npm install aws-sdk
 
 import Amplify, { Auth } from 'aws-amplify';
 
+function fixedEncodeURIComponent(str: string) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+}
+
 let user = {
   "name": "Alexander Templeton",
   "image": "https://avatars.githubusercontent.com/u/10369436?v=4"
@@ -200,7 +206,7 @@ let image_card = {
 function AppShellDemo() {
   const theme = useMantineTheme();
   const [games, setGames] = useState(games_template);
-  const [didLoad, setDidLoad] = useState<boolean>(true);
+  const [didLoad, setDidLoad] = useState<boolean>(false);
 
   useEffect(() => {
     if (!didLoad) {
@@ -260,7 +266,7 @@ function AppShellDemo() {
               },
               {
                 "uuid": "df271a8c-82bb-4dc7-9b68-1fe6fbeb6528",
-                "image": `https://cf.geekdo-images.com/wg9oOLcsKvDesSUdZQ4rxw__original/img/thIqWDnH9utKuoKVEUqveDixprI=/0x0/filters:format(jpeg)/pic3536616.jpg`,
+                "image": `${JSON.parse(data.Payload.toString()).body.image}`,
                 "title": "Terraforming Mars",
                 "host": "Scott",
                 "date": "26 May 22",
