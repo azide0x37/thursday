@@ -1,9 +1,32 @@
 import React from 'react';
-import { createStyles, Container, Text, Button, Group, useMantineTheme } from '@mantine/core';
+import { createStyles, Container, Text, Button, Group, useMantineTheme, Overlay } from '@mantine/core';
 
 const BREAKPOINT = '@media (max-width: 755px)';
 
 const useStyles = createStyles((theme) => ({
+  hero: {
+    position: 'relative',
+    backgroundImage:
+      'url(https://assets-prd.ignimgs.com/2020/01/11/img-20200109-134204-1578701390405.jpg)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+
+  container: {
+    height: 700,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    paddingBottom: theme.spacing.xl * 6,
+    zIndex: 1,
+    position: 'relative',
+
+    [theme.fn.smallerThan('sm')]: {
+      height: 500,
+      paddingBottom: theme.spacing.xl * 3,
+    },
+  },
   wrapper: {
     position: 'relative',
     boxSizing: 'border-box',
@@ -12,7 +35,7 @@ const useStyles = createStyles((theme) => ({
 
   inner: {
     position: 'relative',
-    paddingTop: 200,
+    paddingTop: 100,
     paddingBottom: 120,
 
     [BREAKPOINT]: {
@@ -22,26 +45,29 @@ const useStyles = createStyles((theme) => ({
   },
 
   title: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    fontSize: 62,
+    color: theme.white,
+    fontSize: 60,
     fontWeight: 900,
     lineHeight: 1.1,
-    margin: 0,
-    padding: 0,
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
 
-    [BREAKPOINT]: {
-      fontSize: 42,
+    [theme.fn.smallerThan('sm')]: {
+      fontSize: 40,
       lineHeight: 1.2,
+    },
+
+    [theme.fn.smallerThan('xs')]: {
+      fontSize: 28,
+      lineHeight: 1.3,
     },
   },
 
   description: {
-    marginTop: theme.spacing.xl,
-    fontSize: 24,
+    color: theme.white,
+    maxWidth: 600,
 
-    [BREAKPOINT]: {
-      fontSize: 18,
+    [theme.fn.smallerThan('sm')]: {
+      maxWidth: '100%',
+      fontSize: theme.fontSizes.sm,
     },
   },
 
@@ -72,9 +98,8 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : 'transparent',
 
     '&:hover': {
-      backgroundColor: `${
-        theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
-      } !important`,
+      backgroundColor: `${theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
+        } !important`,
     },
   },
 }));
@@ -84,22 +109,26 @@ export function HeroTitle() {
   const theme = useMantineTheme();
 
   return (
-    <div className={classes.wrapper}>
-      <Container size={700} className={classes.inner}>
+    <div className={classes.hero}>
+      <Overlay
+        gradient="linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, .65) 40%)"
+        opacity={1}
+        zIndex={0}
+      />
+      <Container size={700} className={classes.container}>
         <h1 className={classes.title}>
           A{' '}
           <Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} inherit>
-            fully featured
+            batteries included
           </Text>{' '}
-          React components and hooks library
+          game night scheduler
         </h1>
 
         <Text className={classes.description} color="dimmed">
-          Build fully functional accessible web applications with ease – Mantine includes more than
-          100 customizable components and hooks to cover you in any situation
+          Organize and schedule your gaming sessions on your schedule. Thursday includes every feature you need for game nights to go off without a hitch!
         </Text>
 
-        <Group className={classes.controls}>
+        <Group className={classes.controls} position='center'>
           <Button
             size="xl"
             className={classes.control}
@@ -113,9 +142,9 @@ export function HeroTitle() {
             component="a"
             href="https://github.com/mantinedev/mantine"
             size="xl"
-            variant="outline"
+            variant="gradient"
             className={cx(classes.control, classes.githubControl)}
-            color={theme.colorScheme === 'dark' ? 'gray' : 'dark'}
+            gradient={{ from: 'orange', to: 'yellow' }}
           >
             GitHub
           </Button>

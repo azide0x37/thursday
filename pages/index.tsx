@@ -1,75 +1,182 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link'
 
 import {
+  createStyles,
   AppShell,
   Header,
   useMantineTheme,
-  Container,
-  Title,
-  Button
+  MediaQuery,
+  Group,
+  Burger,
+  Button,
+  Text,
+  Footer,
+  ActionIcon,
+  Anchor
 } from '@mantine/core';
 
+import { BrandTwitter, BrandYoutube, BrandInstagram } from 'tabler-icons-react';
 
-import { FooterLinks } from '../components/FooterLinks/FooterLinks'
+import { HeroTitle } from '../components/HeroTitle/HeroTitle'
 
+const BREAKPOINT = '@media (max-width: 755px)';
 
-let footer_links = {
-  "data": [
-    {
-      "title": "About",
-      "links": [
-        { "label": "Features", "link": "#" },
-        { "label": "Pricing", "link": "#" },
-        { "label": "Support", "link": "#" },
-        { "label": "Forums", "link": "#" }
-      ]
+const useStyles = createStyles((theme) => ({
+  footer: {
+    borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]
+      }`,
+  },
+  wrapper: {
+    position: 'relative',
+    boxSizing: 'border-box',
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+  },
+
+  inner: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: `${theme.spacing.md}px ${theme.spacing.md}px`,
+
+    [theme.fn.smallerThan('sm')]: {
+      flexDirection: 'column',
     },
-    {
-      "title": "Project",
-      "links": [
-        { "label": "Contribute", "link": "#" },
-        { "label": "Media assets", "link": "#" },
-        { "label": "Changelog", "link": "#" },
-        { "label": "Releases", "link": "#" }
-      ]
-    },
-    {
-      "title": "Community",
-      "links": [
-        { "label": "Join Discord", "link": "#" },
-        { "label": "Follow on Twitter", "link": "#" },
-        { "label": "Email newsletter", "link": "#" },
-        { "label": "GitHub discussions", "link": "#" }
-      ]
-    }
-  ]
-}
+  },
 
+  title: {
+    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+    fontSize: 24,
+    fontWeight: 900,
+    lineHeight: 1.1,
+    margin: 0,
+    padding: 0,
+    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+
+    [BREAKPOINT]: {
+      fontSize: 16,
+      lineHeight: 1.2,
+    },
+  },
+
+  description: {
+    marginTop: theme.spacing.xl,
+    fontSize: 24,
+
+    [BREAKPOINT]: {
+      fontSize: 18,
+    },
+  },
+
+  controls: {
+    marginTop: theme.spacing.xl * 2,
+
+    [BREAKPOINT]: {
+      marginTop: theme.spacing.xl,
+    },
+  },
+
+  control: {
+    height: 54,
+    paddingLeft: 38,
+    paddingRight: 38,
+
+    [BREAKPOINT]: {
+      height: 54,
+      paddingLeft: 18,
+      paddingRight: 18,
+      flex: 1,
+    },
+  },
+
+  links: {
+    [theme.fn.smallerThan('sm')]: {
+      marginTop: theme.spacing.lg,
+      marginBottom: theme.spacing.sm,
+    },
+  },
+  githubControl: {
+    borderWidth: 2,
+    borderColor: theme.colorScheme === 'dark' ? 'transparent' : theme.colors.dark[9],
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : 'transparent',
+
+    '&:hover': {
+      backgroundColor: `${theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
+        } !important`,
+    },
+  },
+}));
 
 export default function AppShellDemo() {
+  const { classes } = useStyles();
   const theme = useMantineTheme();
+  const [opened, setOpened] = useState(false);
 
-  return (
-    <AppShell
-      fixed
-      padding={"md"}
-      styles={{
-        main: {
-          background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-        },
-      }}
-      header={
-        <Header fixed height={60} >
-          <Link href="/app"><Button>Login Now</Button></Link>
-        </Header>
-      }
-      footer={
-        <FooterLinks {...footer_links} />
-      }
+  let links = [
+    { "link": "#", "label": "Contact" },
+    { "link": "#", "label": "Privacy" },
+    { "link": "#", "label": "Blog" },
+    { "link": "#", "label": "Careers" }
+  ]
+
+
+  const items = links.map((link) => (
+    <Anchor<'a'>
+      color="dimmed"
+      key={link.label}
+      href={link.link}
+      sx={{ lineHeight: 1 }}
+      onClick={(event) => event.preventDefault()}
+      size="sm"
     >
-      <Container size="xl" px="xs" py="xs">
-      </Container>
-    </AppShell >
+      {link.label}
+    </Anchor>
+  ));
+  return (
+    <>
+      <Header height={60} p="md">
+        <Group position="apart">
+          <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+            <Burger
+              opened={opened}
+              onClick={() => setOpened((o) => !o)}
+              size="sm"
+              color={theme.colors.gray[6]}
+              mr="xl"
+            />
+          </MediaQuery>
+          <h1 className={classes.title}>
+            <Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} inherit>Thursday Gaming</Text>
+          </h1>
+          <Link href="/app">
+            <Button
+              radius="lg"
+              variant="gradient"
+              gradient={{ from: 'blue', to: 'cyan' }}
+            >
+              Login
+            </Button>
+          </Link>
+        </Group>
+      </Header>
+      <HeroTitle />
+      <div className={classes.inner}>
+        <h1 className={classes.title}>
+          <Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} >Thursday Gaming</Text>
+        </h1>
+        <Group className={classes.links}>{items}</Group>
+        <Group spacing={0} position="right" noWrap>
+          <ActionIcon size="lg">
+            <BrandTwitter size={18} />
+          </ActionIcon>
+          <ActionIcon size="lg">
+            <BrandYoutube size={18} />
+          </ActionIcon>
+          <ActionIcon size="lg">
+            <BrandInstagram size={18} />
+          </ActionIcon>
+        </Group>
+      </div>
+    </>
   );
 }
