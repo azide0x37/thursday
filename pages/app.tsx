@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppShell,
   Navbar,
@@ -36,26 +36,6 @@ Amplify.configure(awsExports);
 import Lambda from 'aws-sdk/clients/lambda'; // npm install aws-sdk
 
 import Amplify, { Auth } from 'aws-amplify';
-
-Auth.currentCredentials().then((credentials) => {
-  const lambda = new Lambda({
-    credentials: Auth.essentialCredentials(credentials),
-    region: "us-east-1",
-  });
-  lambda.invoke(
-    {
-      FunctionName: 'BGGApi',
-      Payload: JSON.stringify({ board_game_title: 'Terraforming Mars' }),
-    },
-    function (err, data) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log(data);
-    }
-  );
-});
 
 let user = {
   "name": "Alexander Templeton",
@@ -160,7 +140,7 @@ let table_data = {
   ]
 }
 
-let games = [{
+let games_template = [{
   "uuid": "311b4972-acbd-4769-b650-a64c7c44c7ed",
   "image": "https://assets-prd.ignimgs.com/2020/01/11/img-20200109-134204-1578701390405.jpg",
   "title": "Return to Dark Tower",
@@ -198,6 +178,14 @@ let games = [{
   "date": "19 May 22",
   "category": "Competitive"
 },
+{
+  "uuid": "df271a8c-82bb-4dc7-9b68-1fe6fbeb6528",
+  "image": "https://cf.geekdo-images.com/wg9oOLcsKvDesSUdZQ4rxw__original/img/thIqWDnH9utKuoKVEUqveDixprI=/0x0/filters:format(jpeg)/pic3536616.jpg",
+  "title": "Terraforming Mars",
+  "host": "Pablo",
+  "date": "19 May 22",
+  "category": "Competitive"
+},
 ]
 
 let image_card = {
@@ -211,8 +199,80 @@ let image_card = {
 
 function AppShellDemo() {
   const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
+  const [games, setGames] = useState(games_template);
+  const [didLoad, setDidLoad] = useState<boolean>(true);
 
+  useEffect(() => {
+    if (!didLoad) {
+      Auth.currentCredentials().then((credentials) => {
+        const lambda = new Lambda({
+          credentials: Auth.essentialCredentials(credentials),
+          region: "us-east-1",
+        });
+        lambda.invoke(
+          {
+            FunctionName: 'BGGApi-dev',
+            Payload: JSON.stringify({ board_game_title: 'Terraforming Mars' }),
+          },
+          function (err, data) {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            if (data.Payload) {
+              setGames([{
+                "uuid": "311b4972-acbd-4769-b650-a64c7c44c7ed",
+                "image": "https://assets-prd.ignimgs.com/2020/01/11/img-20200109-134204-1578701390405.jpg",
+                "title": "Return to Dark Tower",
+                "host": "Scott",
+                "date": "21 Apr 22",
+                "category": "Co-op"
+              },
+              {
+                "uuid": "deef4dac-046b-401c-918e-898ba817dff7",
+                "image": "https://images.fineartamerica.com/images-medium-large-5/rakdos-cackler-ryan-barger.jpg",
+                "title": "Edge of Winter Chapter 5",
+                "host": "Online",
+                "date": "28 Apr 22",
+                "category": "Dungeons & Dragons"
+              }, {
+                "uuid": "f43dca35-fa9b-408d-858e-e35c55d856a1",
+                "image": "https://pbs.twimg.com/media/FL1Ez-8WUAsSNaU?format=jpg&name=medium",
+                "title": "Great Wall",
+                "host": "Scott",
+                "date": "5 May 22",
+                "category": "Co-op/Betrayer"
+              },
+              {
+                "uuid": "28f4efae-38af-418e-b246-2eaa2eb674b7",
+                "image": "https://images.fineartamerica.com/images-medium-large-5/rakdos-cackler-ryan-barger.jpg",
+                "title": "Edge of Winter Chapter 6",
+                "host": "Online",
+                "date": "12 May 22",
+                "category": "Dungeons & Dragons"
+              }, {
+                "uuid": "df271a8c-82bb-4dc7-9b68-1fe6fbeb6528",
+                "image": "https://pbs.twimg.com/media/D4ggci5XoAAVHPi.jpg",
+                "title": "Kemet",
+                "host": "Pablo",
+                "date": "19 May 22",
+                "category": "Competitive"
+              },
+              {
+                "uuid": "df271a8c-82bb-4dc7-9b68-1fe6fbeb6528",
+                "image": `https://cf.geekdo-images.com/wg9oOLcsKvDesSUdZQ4rxw__original/img/thIqWDnH9utKuoKVEUqveDixprI=/0x0/filters:format(jpeg)/pic3536616.jpg`,
+                "title": "Terraforming Mars",
+                "host": "Scott",
+                "date": "26 May 22",
+                "category": "Competitive"
+              }])
+            }
+          }
+        );
+      });
+    }
+    setDidLoad(true);
+  }, [didLoad, games])
 
   return (
     <AppShell

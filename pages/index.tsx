@@ -1,21 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link'
 
 import {
   AppShell,
-  Navbar,
   Header,
-  Footer,
-  Aside,
-  Text,
-  MediaQuery,
-  Burger,
   useMantineTheme,
   Container,
-  SimpleGrid,
   Title,
-  Paper,
-  Timeline,
   Button
 } from '@mantine/core';
 
@@ -59,7 +50,6 @@ let footer_links = {
 export default function AppShellDemo() {
   const theme = useMantineTheme();
 
-
   return (
     <AppShell
       fixed
@@ -79,8 +69,6 @@ export default function AppShellDemo() {
       }
     >
       <Container size="xl" px="xs" py="xs">
-        <Title order={1}>Login</Title>
-        <Link href="/app"><Button>Login Now</Button></Link>
       </Container>
     </AppShell >
   );
