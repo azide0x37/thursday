@@ -22,6 +22,14 @@
         "BGGApi": {
           "deploymentBucketName": "amplify-quaoar-dev-145731-deployment",
           "s3Key": "amplify-builds/BGGApi-304e516b4b3355536f2f-build.zip"
+        },
+        "BGGGameById": {
+          "deploymentBucketName": "amplify-quaoar-dev-145731-deployment",
+          "s3Key": "amplify-builds/BGGGameById-4965683668493052374a-build.zip"
+        },
+        "BGGGameListGen": {
+          "deploymentBucketName": "amplify-quaoar-dev-145731-deployment",
+          "s3Key": "amplify-builds/BGGGameListGen-305149673244464c7946-build.zip"
         }
       },
       "auth": {

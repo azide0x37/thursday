@@ -34,14 +34,14 @@ Organize and schedule your gaming sessions on your schedule. Thursday includes e
         <meta property="og:title" content="Thursday Gaming" />
         <meta property="og:description" content="A batteries included game night scheduler.
 Organize and schedule your gaming sessions on your schedule. Thursday includes every feature you need for game nights to go off without a hitch!"/>
-        <meta property="og:image" content="" />
+        <meta property="og:image" content="/img-20200109-134204-1578701390405.jpeg" />
 
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://www.thursday.games/" />
         <meta property="twitter:title" content="Thursday Gaming" />
         <meta property="twitter:description" content="A batteries included game night scheduler.
 Organize and schedule your gaming sessions on your schedule. Thursday includes every feature you need for game nights to go off without a hitch!"/>
-        <meta property="twitter:image" content="" />
+        <meta property="twitter:image" content="/img-20200109-134204-1578701390405.jpeg" />
       </Head>
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
         <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
