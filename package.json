@@ -1,6 +1,6 @@
 {
-  "name": "mantine-next-template",
-  "version": "1.0.0",
+  "name": "thursday-games",
+  "version": "2.3.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
