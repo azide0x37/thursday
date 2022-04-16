@@ -7,6 +7,12 @@ verify_ssl = true
 
 [packages]
 src = {editable = true, path = "./src"}
+requests = "*"
 
 [requires]
 python_version = "3.8"
+
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"

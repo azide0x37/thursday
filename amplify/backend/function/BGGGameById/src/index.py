@@ -72,7 +72,7 @@ def handler(event, context):
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
       },
-      'body': GameDetailsById(id=event['board_game_title'])
+      'body': GameDetailsById(id=event['board_game_id'])
   }
 
 
