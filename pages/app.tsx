@@ -1,22 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
   AppShell,
-  Navbar,
   Header,
-  Footer,
-  Aside,
-  Text,
-  MediaQuery,
-  Burger,
   useMantineTheme,
   Container,
   SimpleGrid,
-  Title,
-  Paper,
-  Timeline
+  Title
 } from '@mantine/core';
-
-import { GitBranch, GitPullRequest, GitCommit, MessageDots } from 'tabler-icons-react';
 
 import { HeaderAction } from '../components/HeaderAction/HeaderAction'
 import { FooterLinks } from '../components/FooterLinks/FooterLinks'
@@ -36,12 +26,6 @@ Amplify.configure(awsExports);
 import Lambda from 'aws-sdk/clients/lambda'; // npm install aws-sdk
 
 import Amplify, { Auth } from 'aws-amplify';
-
-function fixedEncodeURIComponent(str: string) {
-  return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
-    return '%' + c.charCodeAt(0).toString(16);
-  });
-}
 
 let user = {
   "name": "Alexander Templeton",
@@ -318,6 +302,11 @@ function AppShellDemo() {
         </SimpleGrid>
       </Container >
 
+      {/*
+      # This section conditional on user having active game groups
+      # UserProfile.gamingGroups.map((group) => <GamingGroupInfoblock group={group}>)
+      
+      */}
       <Container size="xl" px="xs" py="xs">
         <Title order={1}>New & Unplayed</Title>
       </Container>
