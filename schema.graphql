@@ -1,12 +1,29 @@
 type UserProfile 
   @model 
   @auth(rules: [{ allow: owner }]) {
+  id: ID!
   profileID: ID!
   updatedAt: AWSDateTime!
   content: String
   username: String!
   bggUsername: String
-  gameLibrary: [BoardGame] 
+  gameLibrary: [BoardGame] @connection(keyName: "byBoardGame", fields: ["profileID"])
+  gameNightsHost: [GameNight] @connection(keyName: "byHost", fields: ["sessionID"])
+  gameNights: [GameNight] @connection()
+  gamingGroups: [GamingGroup] @connection()
+}
+
+# Create a join model and disable queries as you don't need them
+# and can query through UserProfile.gameLibrary and BoardGame.inLibraries
+type UserBoardGames
+  @model(queries: null)
+  @key(name: "byBoardGame", fields: ["userID", "boardgameID"])
+  @key(name: "byUserProfile", fields: ["boardgameID", "userID"]) {
+  id: ID!
+  userID: ID!
+  boardgameID: ID!
+  user: User! @connection(fields: ["userID"])
+  boardgame: BoardGame! @connection(fields: ["boardgameID"])
 }
 
 type BoardGame 
@@ -16,17 +33,33 @@ type BoardGame
   bggID: String
   name: String!
   yearPublished: String
-  inLibraries: [UserProfile]
+  inLibraries: [UserProfile] @connection(keyName: "byUserProfile", fields: ["gameID"])
 }
 
 type GameNight 
   @model 
-  @auth(rules: [{ allow: owner, operations: [create, delete] }])){
+  @auth(rules: [{ allow: owner, operations: [create, delete] }]))
+  @key(name: "byHost", fields: ["sessionID", "boardgame", "datetime"]){
+  id: ID!
   sessionID: ID!
-  createdBy: String!
   updatedAt: AWSDateTime!
-  host: UserProfile!
-  participants: [UserProfile]!
-  time: AWSDateTime!
+  boardgame: BoardGame!
+  host: UserProfile! 
+  participants: [UserProfile]
+  datetime: String!
+  gamingGroup: [GamingGroup]
+  successfulGame: Boolean
 }
 
+type GamingGroup
+  @model 
+  @auth(rules: [{ allow: owner, operations: [create, delete, update] }])){
+  id: ID!
+  groupID: ID!
+  name: String!
+  members: [UserProfile]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  gamesPlayed: [BoardGame]
+  gameNightsHeld: [GameNight]
+}
