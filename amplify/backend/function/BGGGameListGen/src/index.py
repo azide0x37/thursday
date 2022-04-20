@@ -1,6 +1,7 @@
 import json
 import requests
 import xml.etree.ElementTree as ET
+import time
 
 
 BASE_URL = "https://boardgamegeek.com/xmlapi2"
@@ -29,9 +30,9 @@ def GameDetailsById(id):
     #          childresponse = {'expansions': str(child.attrib)}
     #          jsonreply.update(childresponse)
     
-        return jsonreply
+        return json.dumps(jsonreply)
     except:
-        return "error"
+        return "error, could not find the game details"
 
 
 def GameListGen(partialname):
@@ -57,9 +58,51 @@ def GameListGen(partialname):
                     formated = {"game"+str(y):{'name':str(gamevalue['value']), 'id':str(gameidvalue['id']), 'image': str(thumbvalue['image'])}}
                     namejson.update(formated)                    
                     y = y+1
-        return namejson
+        return json.dumps(namejson)
     except:
-        return "error"
+        return "error, could not populate the list"
+
+def ColectionByUser(bgguser, max_tries=5):
+    try:    
+        # BGG API has doesn't directly give you the collection, it will accept the request and make it ready on a second attempt.
+        for i in range(max_tries):
+            response = requests.get(BASE_URL+"/collection?username="+str(bgguser))
+            if response.status_code == 202:
+                time.sleep(1.0)
+    #            print("not ready")
+                continue
+            else:
+                tree = ET.fromstring(response.content)
+    #            print("ready")
+                break
+        #Begin looking into the xml
+        x = '{}'
+        y = 0
+        jsonite = json.loads(x)
+        for child in tree:
+            for item in child:
+                if item.tag == 'name':
+                    gamename = json.dumps(item.text)
+                    gametext = json.loads(gamename)
+
+                    gameid = json.dumps(child.attrib)
+                    gameidvalue = json.loads(gameid)
+                elif item.tag == 'image':
+                    gameimage = json.dumps(item.text)
+                    gameimageurl = json.loads(gameimage)
+            formated = {"game"+str(y):{"name":str(gametext), "id":str(gameidvalue['objectid']), "image":str(gameimageurl)}}
+            jsonite.update(formated)
+            y = y+1
+        return json.dumps(jsonite)
+
+    except:
+        return "error retrieving the collection"
+
+
+            
+
+
+
 
 def handler(event, context):
   print('received event:')
@@ -77,5 +120,6 @@ def handler(event, context):
 
 
 ###########Comment OUT when merging###################
-# if __name__ == '__main__':
+if __name__ == '__main__':
 #    print(GameListGen('Terraforming Mars: ares'))
+    print(ColectionByUser('pyaniz'))
