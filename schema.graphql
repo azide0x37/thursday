@@ -1,0 +1,31 @@
+type UserProfile 
+  @model 
+  @auth(rules: [{ allow: owner, operations: [create, delete, update] }]) {
+  profileid: ID!
+  updatedAt: AWSDateTime!
+  content: String
+  username: String!
+  bgg_username: String
+  game_library: [BoardGame] 
+}
+
+type BoardGame 
+  @model 
+  @auth(rules: [{ allow: owner, operations: [create, delete, update] }]) {
+  gameid: ID!
+  updatedAt: AWSDateTime!
+  bgg_id: String
+  name: String!
+  in_library: [UserProfile]
+}
+
+type GameNight 
+  @model 
+  @auth(rules: [{ allow: owner, operations: [create, delete, update] }])){
+  sessionid: ID!
+  createdBy: String!
+  updatedAt: AWSDateTime!
+  host: UserProfile!
+  participants: [UserProfile]
+}
+
