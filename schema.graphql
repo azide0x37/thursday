@@ -63,3 +63,26 @@ type GamingGroup
   gamesPlayed: [BoardGame]
   gameNightsHeld: [GameNight]
 }
+
+type S3Object {
+  bucket: String!
+  region: String!
+  key: String!
+}
+
+type ProfilePicture @model @auth(rules: [{allow: owner}]) {
+  id: ID!
+  name: String
+  owner: String
+
+  # Reference the S3Object type from a field.
+  file: S3Object
+}
+
+type GamePicture @model {
+  id: ID!
+  name: String
+
+  # Reference the S3Object type from a field.
+  file: S3Object
+}
