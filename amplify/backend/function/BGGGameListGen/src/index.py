@@ -8,10 +8,7 @@ BASE_URL = "https://boardgamegeek.com/xmlapi2"
 
 def GameDetailsById(id):
     try:
-#        responsename = requests.get(BASE_URL+"/search?query="+name+"&exact=1&type=boardgame")
-#        tree = ET.fromstring(responsename.content)
-#        id = json.dumps(tree[0].attrib)
-#        idjson = json.loads(id)
+
         response = requests.get(BASE_URL+"/thing?id="+str(id))
         tree2 = ET.fromstring(response.content)
         
@@ -26,11 +23,7 @@ def GameDetailsById(id):
             elif child.tag == 'image':
                 childresponse = {child.tag:child.text}
                 jsonreply.update(childresponse) 
-    #      elif "'boardgameexpansion'" in str(child.attrib):
-    #          childresponse = {'expansions': str(child.attrib)}
-    #          jsonreply.update(childresponse)
-    
-        return json.dumps(jsonreply)
+        return jsonreply
     except:
         return "error, could not find the game details"
 
@@ -52,12 +45,11 @@ def GameListGen(partialname):
                     # get the ID from previos level and format into Json
                     gameid = json.dumps(child.attrib)
                     gameidvalue = json.loads(gameid)
- #                   print(gameidvalue)
                     thumb = json.dumps(GameDetailsById(gameidvalue['id']))
                     thumbvalue = json.loads(thumb)
                     formated = {"game"+str(y):{'name':str(gamevalue['value']), 'id':str(gameidvalue['id']), 'image': str(thumbvalue['image'])}}
-                    namejson.update(formated)                    
-                    y = y+1
+            namejson.update(formated)                    
+            y = y+1
         return json.dumps(namejson)
     except:
         return "error, could not populate the list"
@@ -69,11 +61,9 @@ def ColectionByUser(bgguser, max_tries=5):
             response = requests.get(BASE_URL+"/collection?username="+str(bgguser))
             if response.status_code == 202:
                 time.sleep(1.0)
-    #            print("not ready")
                 continue
             else:
                 tree = ET.fromstring(response.content)
-    #            print("ready")
                 break
         #Begin looking into the xml
         x = '{}'
@@ -118,8 +108,7 @@ def handler(event, context):
       'body': GameListGen(partialname=event['board_game_name'])
   }
 
-
-###########Comment OUT when merging###################
 if __name__ == '__main__':
-#    print(GameListGen('Terraforming Mars: ares'))
-    print(ColectionByUser('pyaniz'))
+#    print(GameListGen('Terraforming'))
+#    print(GameDetailsById('307807'))
+    print(ColectionByUser(''))
