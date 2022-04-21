@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "thursdayAPI",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authquaoarc3551e0d",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

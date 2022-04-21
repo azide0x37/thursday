@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "thursdayAPI",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/lex/Documents/Nemea/Development/quaoar/amplify/backend/api/thursdayAPI/schema.graphql",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authquaoarc3551e0d"
+    },
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "AUTOMERGE"
+      }
+    }
+  }
+}
