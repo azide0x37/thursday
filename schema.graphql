@@ -34,6 +34,8 @@ type BoardGame
   name: String!
   yearPublished: String
   inLibraries: [UserProfile] @connection(keyName: "byUserProfile", fields: ["gameID"])
+  minPlayers: String 
+  maxPlayers: String
 }
 
 type GameNight 
@@ -79,7 +81,7 @@ type ProfilePicture @model @auth(rules: [{allow: owner}]) {
   file: S3Object
 }
 
-type GamePicture @model {
+type BoardGamePicture @model {
   id: ID!
   name: String
 
