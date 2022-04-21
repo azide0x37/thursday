@@ -5,7 +5,7 @@ type UserProfile @model @auth(rules: [{ allow: owner }]) {
   content: String
   username: String!
   bggUsername: String
-  gameLibrary: [BoardGames] @manyToMany(relationName: "UserBoardGames")
+  gameLibrary: [BoardGame] @manyToMany(relationName: "UserBoardGames")
   gameNightsHost: [GameNight] @hasMany
   gameNights: [GameNight] @manyToMany(relationName: "UserGameNights")
   gamingGroups: [GamingGroup] @manyToMany(relationName: "UserGamingGroups")
@@ -22,10 +22,7 @@ type BoardGame @model @auth(rules: [{ allow: private, operations: [create, delet
   maxPlayers: String
 }
 
-type GameNight
-  @model
-  @auth(rules: [{ allow: owner, operations: [create, delete] }])
-  @key(name: "byHost", fields: ["gameNightID", "boardgame", "datetime"]) {
+type GameNight @model @auth(rules: [{ allow: owner, operations: [create, delete] }]) {
   id: ID!
   gameNightID: ID!
   updatedAt: AWSDateTime!
