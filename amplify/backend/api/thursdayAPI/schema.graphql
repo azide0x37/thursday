@@ -1,0 +1,69 @@
+type UserProfile @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  profileID: ID!
+  updatedAt: AWSDateTime!
+  content: String
+  username: String!
+  bggUsername: String
+  gameLibrary: [BoardGame] @manyToMany(relationName: "UserBoardGames")
+  gameNightsHost: [GameNight] @hasMany
+  gameNights: [GameNight] @manyToMany(relationName: "UserGameNights")
+  gamingGroups: [GamingGroup] @manyToMany(relationName: "UserGamingGroups")
+}
+
+type BoardGame @model @auth(rules: [{ allow: private, operations: [create, delete] }]) {
+  gameID: ID!
+  updatedAt: AWSDateTime!
+  bggID: String
+  name: String!
+  yearPublished: String
+  inLibraries: [UserProfile] @manyToMany(relationName: "UserBoardGames")
+  minPlayers: String
+  maxPlayers: String
+}
+
+type GameNight @model @auth(rules: [{ allow: owner, operations: [create, delete] }]) {
+  id: ID!
+  gameNightID: ID!
+  updatedAt: AWSDateTime!
+  boardgame: BoardGame! @hasOne
+  host: UserProfile! @belongsTo
+  participants: [UserProfile] @manyToMany(relationName: "UserGameNights")
+  datetime: String!
+  gamingGroup: GamingGroup @belongsTo
+  successfulGame: Boolean
+}
+
+type GamingGroup @model @auth(rules: [{ allow: owner, operations: [create, delete, update] }]) {
+  id: ID!
+  groupID: ID!
+  name: String!
+  members: [UserProfile] @manyToMany(relationName: "UserGamingGroups")
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  gamesPlayed: [BoardGame] @hasMany
+  gameNightsHeld: [GameNight] @hasMany
+}
+
+type S3Object {
+  bucket: String!
+  region: String!
+  key: String!
+}
+
+type ProfilePicture @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  name: String
+  owner: String
+
+  # Reference the S3Object type from a field.
+  file: S3Object
+}
+
+type BoardGamePicture @model @auth(rules: [{ allow: owner, operations: [create, delete] }]) {
+  id: ID!
+  name: String
+
+  # Reference the S3Object type from a field.
+  file: S3Object
+}

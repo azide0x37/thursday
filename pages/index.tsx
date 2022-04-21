@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link'
+import Router from 'next/router';
 
 import {
   createStyles,
@@ -16,9 +17,14 @@ import {
   Anchor
 } from '@mantine/core';
 
+import Amplify, { Auth } from 'aws-amplify';
+
+import awsExports from '../src/aws-exports';
 import { BrandTwitter, BrandYoutube, BrandInstagram } from 'tabler-icons-react';
 
 import { HeroTitle } from '../components/HeroTitle/HeroTitle'
+
+Amplify.configure(awsExports);
 
 const BREAKPOINT = '@media (max-width: 755px)';
 
@@ -108,6 +114,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function AppShellDemo() {
+  /*
+  TODO: This detects logged in users and redirects to app -- need to figure out how to do this before the 'flash'
+  */
+  Auth.currentSession()
+    .then(() => Router.push('/app'))
+    .catch((error) => {
+      console.error(error);
+    })
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
@@ -132,6 +146,7 @@ export default function AppShellDemo() {
       {link.label}
     </Anchor>
   ));
+
   return (
     <>
       <Header height={60} p="md">
