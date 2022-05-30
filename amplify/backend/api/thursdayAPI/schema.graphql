@@ -27,7 +27,8 @@ type GameNight @model @auth(rules: [{ allow: owner, operations: [create, delete]
   gameNightID: ID!
   updatedAt: AWSDateTime!
   boardgame: BoardGame! @hasOne
-  host: UserProfile! @belongsTo
+  host: UserProfile @belongsTo
+  location: String!
   participants: [UserProfile] @manyToMany(relationName: "UserGameNights")
   datetime: String!
   gamingGroup: GamingGroup @belongsTo
@@ -38,6 +39,7 @@ type GamingGroup @model @auth(rules: [{ allow: owner, operations: [create, delet
   id: ID!
   groupID: ID!
   name: String!
+  description: String
   members: [UserProfile] @manyToMany(relationName: "UserGamingGroups")
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!

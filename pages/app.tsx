@@ -214,6 +214,7 @@ function AppShellDemo() {
               return;
             }
             if (data.Payload) {
+              console.dir(data.Payload)
               setGames([{
                 "uuid": "311b4972-acbd-4769-b650-a64c7c44c7ed",
                 "image": "https://assets-prd.ignimgs.com/2020/01/11/img-20200109-134204-1578701390405.jpg",

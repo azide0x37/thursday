@@ -18,6 +18,7 @@ export function GamingGroupForm(props: PaperProps<'div'>) {
   const form = useForm({
     initialValues: {
       gaming_group_name: '',
+      description: ''
     },
 
     validationRules: {
@@ -33,7 +34,7 @@ export function GamingGroupForm(props: PaperProps<'div'>) {
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
       <Text size="lg" weight={500}>
-        Create new gaming group
+        Create New Gaming Group
       </Text>
 
       <form onSubmit={form.onSubmit(() => { })}>
@@ -51,18 +52,11 @@ export function GamingGroupForm(props: PaperProps<'div'>) {
 
         <Group grow>
           <TextInput
-            label="Name"
-            placeholder="Settlers of Catan"
-            value={form.values.gaming_group_name}
-            onChange={(event) => form.setFieldValue('gaming_group_name', event.currentTarget.value)}
-            error={form.errors.gaming_group_name && 'Invalid gaming_group_name'}
-          />
-          <TextInput
-            label="Name"
-            placeholder="Settlers of Catan"
-            value={form.values.gaming_group_name}
-            onChange={(event) => form.setFieldValue('gaming_group_name', event.currentTarget.value)}
-            error={form.errors.gaming_group_name && 'Invalid gaming_group_name'}
+            label="Description"
+            placeholder="This is the best gaming group; et. c."
+            value={form.values.description}
+            onChange={(event) => form.setFieldValue('description', event.currentTarget.value)}
+            error={form.errors.description && 'Invalid desciption'}
           />
         </Group>
 
