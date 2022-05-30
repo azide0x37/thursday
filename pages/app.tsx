@@ -5,7 +5,8 @@ import {
   useMantineTheme,
   Container,
   SimpleGrid,
-  Title
+  Title,
+  Group
 } from '@mantine/core';
 
 import { HeaderAction } from '../components/HeaderAction/HeaderAction'
@@ -15,7 +16,7 @@ import { EmailBanner } from '../components/EmailBanner/EmailBanner'
 import { GameCardImage } from '../components/GameCardImage/GameCardImage'
 import { ImageCard } from '../components/ImageCard/ImageCard'
 
-
+import { listBoardGames } from '../src/graphql/queries';
 
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
@@ -24,8 +25,10 @@ import awsExports from '../src/aws-exports';
 Amplify.configure(awsExports);
 
 import Lambda from 'aws-sdk/clients/lambda'; // npm install aws-sdk
-
-import Amplify, { Auth } from 'aws-amplify';
+import { Amplify, Auth, API, graphqlOperation } from 'aws-amplify';
+import AddBoardGameModal from '../thursday_components/AddBoardGameModal/AddBoardGameModal'
+import AddGamingGroup from '../thursday_components/AddGamingGroup/AddGamingGroup'
+import AddNewGameSession from '../thursday_components/AddNewGameSession/AddNewGameSession'
 
 let user = {
   "name": "Alexander Templeton",
@@ -169,7 +172,7 @@ let games_template = [{
   "category": "Competitive"
 },
 {
-  "uuid": "df271a8c-82bb-4dc7-9b68-1fe6fbeb6528",
+  "uuid": "df271a8c-82bb-4dc7-9b68-1fe6fbdb6528",
   "image": "https://cf.geekdo-images.com/wg9oOLcsKvDesSUdZQ4rxw__original/img/thIqWDnH9utKuoKVEUqveDixprI=/0x0/filters:format(jpeg)/pic3536616.jpg",
   "title": "Terraforming Mars",
   "host": "Pablo",
@@ -190,6 +193,7 @@ let image_card = {
 function AppShellDemo() {
   const theme = useMantineTheme();
   const [games, setGames] = useState(games_template);
+  const [newGames, setNewGames] = useState([]);
   const [didLoad, setDidLoad] = useState<boolean>(false);
 
   useEffect(() => {
@@ -249,7 +253,7 @@ function AppShellDemo() {
                 "category": "Competitive"
               },
               {
-                "uuid": "df271a8c-82bb-4dc7-9b68-1fe6fbeb6528",
+                "uuid": "df271a8c-82bb-4dc7-9b68-1fe6fbebd528",
                 "image": `${JSON.parse(data.Payload.toString()).body.image}`,
                 "title": "Terraforming Mars",
                 "host": "Scott",
@@ -261,8 +265,31 @@ function AppShellDemo() {
         );
       });
     }
+
+    async function fetchData() {
+      // You can await here
+      /*
+      fuckin' wut typescript??
+      https://simplernerd.com/typescript-dynamic-json/
+      */
+      interface ExampleObject {
+        [key: string]: any
+      }
+
+      const result = await API.graphql(graphqlOperation(listBoardGames))
+
+      let obj: ExampleObject = result;
+
+      setNewGames(obj.data.listBoardGames.items)
+    }
+    fetchData();
+
+
+
     setDidLoad(true);
   }, [didLoad, games])
+
+
 
   return (
     <AppShell
@@ -282,6 +309,16 @@ function AppShellDemo() {
         <FooterLinks {...footer_links} />
       }
     >
+      <Container size="xl" px="xs" py="xs">
+        <Title order={1}>Component Testing</Title>
+        <Group>
+          <AddBoardGameModal />
+          <AddGamingGroup />
+          <AddNewGameSession />
+
+        </Group>
+      </Container>
+
       <Container size="xl" px="xs" py="xs">
         <Title order={1}>Upcoming Games</Title>
       </Container>
@@ -319,9 +356,17 @@ function AppShellDemo() {
             { maxWidth: 550, cols: 1, spacing: 'sm' },
           ]}
         >
-          <ImageCard {...image_card} />
-          <ImageCard {...image_card} />
-          <ImageCard {...image_card} />
+
+          {newGames.map((newGame: any) => {
+            return (<div key={newGame.id}>
+              <h1>{newGame.name}</h1>
+              <h2>(pub: {newGame.yearPublished})</h2>
+              <h3>Date Added:{newGame.createdAt}</h3>
+              <h4>Min Players: {newGame.minPlayers}</h4>
+              <h4>Max Players: {newGame.maxPlayers}</h4>
+            </div>)
+          })}
+          < ImageCard {...image_card} />
         </SimpleGrid>
       </Container>
 

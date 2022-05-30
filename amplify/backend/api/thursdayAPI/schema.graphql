@@ -11,7 +11,7 @@ type UserProfile @model @auth(rules: [{ allow: owner }]) {
   gamingGroups: [GamingGroup] @manyToMany(relationName: "UserGamingGroups")
 }
 
-type BoardGame @model @auth(rules: [{ allow: private, operations: [create, delete] }]) {
+type BoardGame @model @auth(rules: [{ allow: private }]) {
   gameID: ID!
   updatedAt: AWSDateTime!
   bggID: String
@@ -55,15 +55,11 @@ type ProfilePicture @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   name: String
   owner: String
-
-  # Reference the S3Object type from a field.
   file: S3Object
 }
 
 type BoardGamePicture @model @auth(rules: [{ allow: owner, operations: [create, delete] }]) {
   id: ID!
   name: String
-
-  # Reference the S3Object type from a field.
   file: S3Object
 }

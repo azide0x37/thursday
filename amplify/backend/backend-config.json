@@ -72,7 +72,11 @@
               "userPoolId": "authquaoarc3551e0d"
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ]
         }
       }
     }
