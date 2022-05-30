@@ -1,42 +1,73 @@
 import json
 import requests
+from requests.adapters import HTTPAdapter
+
+from requests.packages.urllib3.util.retry import Retry
 import xml.etree.ElementTree as ET
 
 
 BASE_URL = "https://boardgamegeek.com/xmlapi2"
 
+
+def requests_retry_session(
+    retries=3,
+    backoff_factor=0.3,
+    status_forcelist=(400, 500, 502, 504),
+    session=None,
+):
+    '''Implements Exponential Backoff for failed requests due to ratelimit or other failures'''
+    session = session or requests.Session()
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
+
+
 def GameDetailsById(id):
+    '''Takes bgg ID and returns boardgame image (and other details in future)
+
+    This also exists as a separate API endpoint in the Amplify functions. Merge in future.
+    '''
+
     try:
-#        responsename = requests.get(BASE_URL+"/search?query="+name+"&exact=1&type=boardgame")
-#        tree = ET.fromstring(responsename.content)
-#        id = json.dumps(tree[0].attrib)
-#        idjson = json.loads(id)
-        response = requests.get(BASE_URL+"/thing?id="+str(id))
+        response = requests_retry_session().get(BASE_URL+"/thing?id="+str(id))
         tree2 = ET.fromstring(response.content)
-        
+
         x = '{"boardgame":"'+str(id)+'"}'
         jsonreply = json.loads(x)
 
-
         for child in tree2[0]:
             if child.tag == 'thumbnail':
-                childresponse = {child.tag:child.text}
-                jsonreply.update(childresponse) 
+                childresponse = {child.tag: child.text}
+                jsonreply.update(childresponse)
             elif child.tag == 'image':
-                childresponse = {child.tag:child.text}
-                jsonreply.update(childresponse) 
-    #      elif "'boardgameexpansion'" in str(child.attrib):
-    #          childresponse = {'expansions': str(child.attrib)}
-    #          jsonreply.update(childresponse)
-    
+                childresponse = {child.tag: child.text}
+                jsonreply.update(childresponse)
+
         return jsonreply
-    except:
-        return "error"
+    except Exception as e:
+        print(e)
+        return e
 
 
 def GameListGen(partialname):
+    '''Generates a shortlist of games from a partial name of a board game.
+
+    This appears to fail when  'partialname' is <~6 characters.
+    Also, there appears to be a max of around 32 entries returned.
+    ¯\_(ツ)_/¯ 
+    '''
+
     try:
-        responsename = requests.get(BASE_URL+"/search?query="+partialname+"&type=boardgame")
+        responsename = requests_retry_session().get(
+            BASE_URL+"/search?query="+partialname+"&type=boardgame")
         tree = ET.fromstring(responsename.content)
         x = '{}'
         y = 0
@@ -51,31 +82,40 @@ def GameListGen(partialname):
                     # get the ID from previos level and format into Json
                     gameid = json.dumps(child.attrib)
                     gameidvalue = json.loads(gameid)
- #                   print(gameidvalue)
+                    # print(gameidvalue)
                     thumb = json.dumps(GameDetailsById(gameidvalue['id']))
                     thumbvalue = json.loads(thumb)
-                    formated = {"game"+str(y):{'name':str(gamevalue['value']), 'id':str(gameidvalue['id']), 'image': str(thumbvalue['image'])}}
-                    namejson.update(formated)                    
+                    formated = {"game"+str(y): {'name': str(gamevalue['value']), 'id': str(
+                        gameidvalue['id']), 'image': str(thumbvalue['image'])}}
+                    namejson.update(formated)
                     y = y+1
         return namejson
-    except:
-        return "error"
+    except Exception as e:
+        print(e)
+        return e
+
 
 def handler(event, context):
-  print('received event:')
-  print(event)
-  
-  return {
-      'statusCode': 200,
-      'headers': {
-          'Access-Control-Allow-Headers': '*',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-      },
-      'body': GameListGen(partialname=event['board_game_name'])
-  }
+    print('received event:')
+    print(event)
 
-
-###########Comment OUT when merging###################
-# if __name__ == '__main__':
-#    print(GameListGen('Terraforming Mars: ares'))
+    try:
+        process = GameListGen(partialname=event['board_game_name'])
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
+            'body': process
+        }
+    except:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
+        }
