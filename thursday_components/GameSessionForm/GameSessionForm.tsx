@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from '@mantine/hooks';
 import {
   Autocomplete,
@@ -19,7 +19,7 @@ import { Auth } from 'aws-amplify';
 
 import { DatePicker, TimeInput } from '@mantine/dates';
 
-import { AutoCompleteBoardGame } from '../../thursday_components/AutocompleteBoardGame/AutocompleteBoardGame';
+import { AutoCompleteBoardGame, useDebounce } from '../../thursday_components/AutocompleteBoardGame/AutocompleteBoardGame';
 
 const charactersList = [
   {
@@ -45,8 +45,6 @@ const charactersList = [
 ];
 
 export function GameSessionForm(props: PaperProps<'div'>) {
-  const [autocomplete_data, setAutocomplete_data] = useState(charactersList.map((item) => ({ ...item, value: item.label })));
-
   const form = useForm({
     initialValues: {
       game: '',
@@ -56,6 +54,8 @@ export function GameSessionForm(props: PaperProps<'div'>) {
     validationRules: {
     },
   });
+  const [autocomplete_data, setAutocomplete_data] = useState(charactersList.map((item) => ({ ...item, value: item.label })));
+  const debouncedSearchTerm = useDebounce(form.values.game, 300);
 
   interface ItemProps extends SelectItemProps {
     color: MantineColor;
@@ -66,6 +66,13 @@ export function GameSessionForm(props: PaperProps<'div'>) {
 
 
   useEffect(() => {
+    /* TODO: Only set...if needed? WTF
+    setAutocomplete_data([{
+      label: 'Loading...',
+      value: form.values.game,
+      description: 'Loading...'
+    }])
+    */
     Auth.currentCredentials().then((credentials) => {
       const lambda = new Lambda({
         credentials: Auth.essentialCredentials(credentials),
@@ -82,42 +89,39 @@ export function GameSessionForm(props: PaperProps<'div'>) {
             return;
           }
           if (data.Payload != undefined) {
-            try {
-              let return_data = JSON.parse(data.Payload.toString());
-              console.log(return_data);
+            if (!data.Payload.hasOwnProperty('errorMessage') && JSON.parse(data.Payload.toString()).statusCode != 500) {
 
-              if (return_data.body != 'error') {
-                let games_obj = return_data.body
-                console.log(games_obj);
+              try {
+                let return_data = JSON.parse(data.Payload.toString());
+                console.log(return_data);
 
-                let processed_data = Object.keys(games_obj).map((game_identifier) => {
-                  if (games_obj[game_identifier] != undefined) {
-                    return ({
-                      image: games_obj[game_identifier].image ? games_obj[game_identifier].image : "test",
-                      value: games_obj[game_identifier].name ? games_obj[game_identifier].name : "test",
-                      label: games_obj[game_identifier].name ? games_obj[game_identifier].name : "test",
-                      description: games_obj[game_identifier].id ? games_obj[game_identifier].id : "test",
+                if (return_data.hasOwnProperty('body')) {
+                  let game_list = return_data.body.games
+                  console.log(game_list)
+                  if (game_list != []) {
+                    game_list.map((game: any) => {
+                      game['value'] = game['name'];
+                      game['label'] = game['name'];
+                      return game
                     })
+                    setAutocomplete_data(game_list)
+                    console.log(game_list)
                   }
-                  return {
-                    image: 'https://pbs.twimg.com/media/D4ggci5XoAAVHPi.jpg',
-                    value: 'test name',
-                    label: 'test name',
-                    description: 'test description'
-                  }
-                })
-                console.log(processed_data);
-                setAutocomplete_data(processed_data)
+                }
+              } catch (e) {
+                console.log(e);
               }
-
-            } catch (e) {
-              alert(e); // error in the above string (in this case, yes)!
+            } else {
+              console.log(data.Payload);
             }
+          } else {
+            console.log("payload undefined")
+            console.log(data.Payload)
           }
         }
       );
     })
-  }, [form.values.game])
+  }, [debouncedSearchTerm])
 
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
@@ -132,6 +136,7 @@ export function GameSessionForm(props: PaperProps<'div'>) {
             placeholder="Settlers of Catan"
             itemComponent={AutoCompleteBoardGame}
             value={form.values.game}
+            limit={25}
             onChange={(game) => {
               form.setFieldValue('game', game)
             }}

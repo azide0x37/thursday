@@ -21,15 +21,15 @@
       "function": {
         "BGGApi": {
           "deploymentBucketName": "amplify-quaoar-dev-145731-deployment",
-          "s3Key": "amplify-builds/BGGApi-304e516b4b3355536f2f-build.zip"
+          "s3Key": "amplify-builds/BGGApi-6d4166734d6a62796166-build.zip"
         },
         "BGGGameById": {
           "deploymentBucketName": "amplify-quaoar-dev-145731-deployment",
-          "s3Key": "amplify-builds/BGGGameById-4965683668493052374a-build.zip"
+          "s3Key": "amplify-builds/BGGGameById-6d3151534e36352b455a-build.zip"
         },
         "BGGGameListGen": {
           "deploymentBucketName": "amplify-quaoar-dev-145731-deployment",
-          "s3Key": "amplify-builds/BGGGameListGen-305149673244464c7946-build.zip"
+          "s3Key": "amplify-builds/BGGGameListGen-794e544d425178755a73-build.zip"
         }
       },
       "auth": {
