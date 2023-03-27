@@ -29,7 +29,7 @@
         },
         "BGGGameListGen": {
           "deploymentBucketName": "amplify-quaoar-dev-145731-deployment",
-          "s3Key": "amplify-builds/BGGGameListGen-794e544d425178755a73-build.zip"
+          "s3Key": "amplify-builds/BGGGameListGen-697a7357466c78756e31-build.zip"
         }
       },
       "auth": {
